@@ -31,3 +31,4 @@ build/
 dist/
 .vscode/
 .firestarter/
+.ruff_cache/
