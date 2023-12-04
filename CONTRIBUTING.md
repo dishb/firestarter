@@ -89,6 +89,6 @@ If you have any questions, please ask in the Q&A section of Discussions tab.
 
 ## Linting
 
-To make sure our code is maintainable, we use Pylint.
+To make sure our code is maintainable, we use Ruff.
 
-When running Pylint, make sure to use the `./.pylintrc` file for configuration.
+When running Ruff, use the command `ruff .` in the top level directory.
