@@ -30,7 +30,7 @@ License: MIT License
 Source: https://github.com/dishb/firestarter
 """
 
-from ._ignite import _ignite  # noqa: F401
+from ._ignite import _ignite # noqa: F401
 
 __source__ = "https://github.com/dishb/firestarter"
 __license__ = "MIT License"
