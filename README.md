@@ -22,10 +22,6 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 -->
 
-<div align = 'center'>
-    <img alt = 'banner image' src = './assets/banner.png' width = 300/>
-</div>
-
 # firestarter
 A cross-platform CLI to help you jump right into developing projects with Python.
 
@@ -100,6 +96,3 @@ We ask that you read the full Code of Conduct in the [`./CODE_OF_CONDUCT.md`](ht
 
 ## License:
 This project is licensed under the `MIT License`. The full copyright can be found in the [`./LICENSE.md`](https://github.com/dishb/firestarter/blob/main/LICENSE.md) file.
-
-## Attribution
-`firestarter`'s logo is a recolored version of the FontAwesome [fire icon](https://fontawesome.com/icons/fire?f=classic&s=solid).
