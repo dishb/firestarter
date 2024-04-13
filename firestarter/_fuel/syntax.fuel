@@ -1,0 +1,11 @@
+$ comment
+$ [option] :: value
+$ :: is called a seperator
+$ [option] is called a header
+
+[name] :: name
+[path] :: /Users/dishb/Coding/
+[git] :: y
+[project-type] :: package
+[test-framework] :: pytest
+[linter] :: pylint
