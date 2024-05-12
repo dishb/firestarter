@@ -144,8 +144,8 @@ SOFTWARE
         test_framework = input(_Labels.INIT + "Testing framework (pytest, unittest, none): ")
 
     linter = ""
-    while linter.lower() not in ["pylint", "flake8", "black", "bandit", "none"]:
-        linter = input(_Labels.INIT + "Linter (pylint, flake8, black, bandit, none): ")
+    while linter.lower() not in ["pylint", "flake8", "black", "bandit", "none", "ruff"]:
+        linter = input(_Labels.INIT + "Linter (pylint, flake8, black, bandit, none, ruff): ")
 
     temp_dir = Path("./.firestarter/")
     if not os.path.exists(temp_dir):
