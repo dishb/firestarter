@@ -27,9 +27,9 @@ from setuptools import setup
 VERSION = "0.0.2"
 DESCRIPTION = "A cross-platform CLI to help you jump right into developing projects with Python."
 
-with open("README.md", "r", encoding = "utf-8") as file:
-    LONG_DESCRIPTION = file.read()
-    file.close()
+# with open("README.md", "r", encoding = "utf-8") as file:
+#     LONG_DESCRIPTION = file.read()
+#     file.close()
 
 with open("requirements.txt", "r", encoding = "utf-8") as file:
     REQUIREMENTS = file.read()
@@ -41,7 +41,7 @@ setup(name = "firestarter",
       author = "Dishant B. (@dishb)",
       author_email = "code.dishb@gmail.com",
       description = DESCRIPTION,
-      long_description = LONG_DESCRIPTION,
+      long_description = "LONG_DESCRIPTION",
       long_description_content_type = "text/markdown",
       packages = ["firestarter",
                   "firestarter._core"

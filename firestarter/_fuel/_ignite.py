@@ -38,7 +38,7 @@ from platform import system
 from colorama import deinit, init
 
 from .._core._files import GITIGNORE, INIT
-from .._core._projects import _create_blank, _create_package
+from .._core._projects import _create_blank, _create_package, _create_game
 from .._core._labels import _Labels
 
 def _ignite(fuel: Path) -> int:
@@ -88,7 +88,7 @@ def _ignite(fuel: Path) -> int:
             path = Path(line[2])
 
         elif line[0] == "[project-type]":
-            if line[2] not in ["blank", "package"]:
+            if line[2] not in ["blank", "package", "game"]:
                 print(_Labels.ERROR + f"Line {line_num}: Invalid value for [project-type].")
                 print("Please read the documentation to learn more.")
                 return 1
@@ -155,6 +155,8 @@ def _ignite(fuel: Path) -> int:
         _create_blank(root_dir)
     elif project == "package":
         _create_package(root_dir, name)
+    elif project == "game":
+        _create_game(root_dir)
 
     core_dir = root_dir / "core"
     print(_Labels.INFO + f"Creating directory: {core_dir}")

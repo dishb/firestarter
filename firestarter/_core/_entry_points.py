@@ -136,8 +136,8 @@ SOFTWARE
         git = input(_Labels.INIT + "Do you want to initialize a git repository? (Y/n) ")
 
     project = ""
-    while project not in ["package", "blank"]:
-        project = input(_Labels.INIT + "Type of project (package, blank): ")
+    while project not in ["package", "blank", "game"]:
+        project = input(_Labels.INIT + "Type of project (package, blank, game): ")
 
     test_framework = ""
     while test_framework.lower() not in ["pytest", "unittest", "none"]:
@@ -147,7 +147,7 @@ SOFTWARE
     while linter.lower() not in ["pylint", "flake8", "black", "bandit", "none", "ruff"]:
         linter = input(_Labels.INIT + "Linter (pylint, flake8, black, bandit, none, ruff): ")
 
-    temp_dir = Path("./.firestarter/")
+    temp_dir = Path.cwd() / ".firestarter/"
     if not os.path.exists(temp_dir):
         os.mkdir(temp_dir)
 
