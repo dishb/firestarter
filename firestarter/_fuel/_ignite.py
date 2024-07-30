@@ -72,7 +72,7 @@ def _ignite(fuel: Path) -> int:
             test_framework = line[2]
 
         elif line[0] == "[linter]":
-            if line[2] not in ["pylint", "flake8", "black", "bandit", "none"]:
+            if line[2] not in ["pylint", "flake8", "black", "bandit", "none", "ruff"]:
                 print(_Labels.ERROR + f"Line {line_num}: Invalid value for [linter].")
                 print("Please read the documentation to learn more.")
                 return 1
@@ -146,7 +146,7 @@ def _ignite(fuel: Path) -> int:
 
     with open(root_dir / "dev-requirements.txt", "x", encoding = "utf-8") as file:
         if linter != "none":
-            file.write(linter)
+            file.write(f"{linter}\n")
         if test_framework not in ["unittest", "none"]:
             file.write(test_framework)
         file.close()
@@ -161,23 +161,54 @@ def _ignite(fuel: Path) -> int:
 
     if system().lower() in ["darwin", "linux"]:
         activate_venv = root_dir / ".venv/bin/activate"
-        print(_Labels.ACTION + f"Activate the virtual environment: source {activate_venv}")
+        activate_venv = f"source {activate_venv}"
+        print(_Labels.ACTION + f"Activate the virtual environment: {activate_venv}")
     else:
         activate_venv = root_dir / ".venv/Scripts/activate"
         print(_Labels.ACTION +
               f"Activate the virtual environment: {activate_venv}"
               )
 
+    def _install_package(package: str) -> None:
+        """
+        Installs a single package using pip.
+
+        Args:
+            package (str): The name of the package to be installed.
+        """
+        
+        venv_python_loc = root_dir / ".venv" / python_cmd
+        run([activate_venv])
+        run([venv_python_loc, "-m", "pip", "install", package], check = True, stdout = PIPE)
+
+    def _install_packages(file: Path) -> None:
+        """
+        Installs multiple packages from a requirements.txt file using pip.
+
+        Args:
+            file (Path): Path to the requirements.txt file.
+        """
+        
+        with open(file, "r", encoding = "utf-8") as req_file:
+            packages = req_file.read()
+            req_file.close()
+
+        packages = packages.split("\n")
+        for package in packages:
+            _install_package(package)
+
     req_file = root_dir / "requirements.txt"
     dev_req_file = root_dir / "dev-requirements.txt"
-    print(_Labels.ACTION + "Install the dependencies:" +
+    print(_Labels.INFO + "Installing the dependencies:" +
           f"\n{pip_cmd} install {req_file}" +
           f"\n{pip_cmd} install {dev_req_file}"
           )
+    _install_packages(dev_req_file)
 
     if project == "package":
         dist_req_file = root_dir / "dist-requirements.txt"
         print(f"{pip_cmd} install {dist_req_file}")
+        _install_packages(dist_req_file)
 
         print(_Labels.ACTION + f"Install the package in editable mode: {pip_cmd} install -e .")
 
