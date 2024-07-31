@@ -80,5 +80,4 @@ def _create_game(root_dir: Path) -> None:
     
     with open(root_dir / "requirements.txt", "x", encoding = "utf-8") as file:
         file.write("pygame-ce")
-        file.write("")
         file.close()

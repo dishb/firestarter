@@ -202,6 +202,8 @@ def _ignite(fuel: Path) -> int:
           f"\n{pip_cmd} install {dev_req_file}"
           )
     _install_packages(dev_req_file)
+    if project == "game":
+        _install_packages(req_file)
 
     if project == "package":
         dist_req_file = root_dir / "dist-requirements.txt"
