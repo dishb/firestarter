@@ -112,7 +112,7 @@ def _ignite(fuel: Path) -> int:
 
     if git:
         print(_Labels.INFO + "Initializing a git repository.")
-        run(["git", "init", root_dir], stdout = PIPE, text = True, check = True)
+        run(["git", "init", root_dir], stdout = PIPE, check = True)
 
         print(_Labels.INFO + "Creating file: .gitignore")
         with open(root_dir / ".gitignore", "x", encoding = "utf-8") as file:
@@ -161,8 +161,7 @@ def _ignite(fuel: Path) -> int:
 
     if system().lower() in ["darwin", "linux"]:
         activate_venv = root_dir / ".venv/bin/activate"
-        activate_venv = f"source {activate_venv}"
-        print(_Labels.ACTION + f"Activate the virtual environment: {activate_venv}")
+        print(_Labels.ACTION + f"Activate the virtual environment: source {activate_venv}")
     else:
         activate_venv = root_dir / ".venv/Scripts/activate"
         print(_Labels.ACTION +
@@ -177,9 +176,8 @@ def _ignite(fuel: Path) -> int:
             package (str): The name of the package to be installed.
         """
         
-        venv_python_loc = root_dir / ".venv" / python_cmd
-        run([activate_venv])
-        run([venv_python_loc, "-m", "pip", "install", package], check = True, stdout = PIPE)
+        venv_python_loc = root_dir / ".venv" / "bin" / python_cmd
+        run([venv_python_loc, "-m", "pip", "install", package], check = True, stdout = PIPE, stderr = PIPE)
 
     def _install_packages(file: Path) -> None:
         """
