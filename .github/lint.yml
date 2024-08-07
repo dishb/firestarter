@@ -1,6 +1,6 @@
 name: Lint with ruff
 
-on: [push]
+on: [push, pull]
 
 jobs:
   build:
