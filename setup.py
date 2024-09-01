@@ -20,7 +20,8 @@ setup(name = "firestarter",
       long_description = "LONG_DESCRIPTION",
       long_description_content_type = "text/markdown",
       packages = ["firestarter",
-                  "firestarter._core"
+                  "firestarter._core",
+                  "firestarter._fuel"
                   ],
       entry_points = {"console_scripts": ["firestarter = firestarter._core._entry_points:_console"]},
       install_requires = REQUIREMENTS,
