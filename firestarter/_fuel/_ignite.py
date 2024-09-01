@@ -147,10 +147,10 @@ def _ignite(fuel: Path) -> int:
     with open(root_dir / "dev-requirements.txt", "x", encoding = "utf-8") as file:
         if linter != "none":
             file.write(f"{linter}\n")
+        if project != "package":
+            file.write("pyinstaller\n")
         if test_framework not in ["unittest", "none"]:
             file.write(test_framework)
-        if project != "package":
-            file.write("pyinstaller")
         file.close()
     
     if project != "package":
