@@ -5,7 +5,7 @@ from platform import system
 
 from colorama import deinit, init
 
-from .._core._files import GITIGNORE, INIT
+from .._core._files import GITIGNORE, INIT, BUILD_SCRIPT
 from .._core._projects import _create_blank, _create_package, _create_game
 from .._core._labels import _Labels
 
@@ -152,6 +152,12 @@ def _ignite(fuel: Path) -> int:
         if project != "package":
             file.write("pyinstaller")
         file.close()
+    
+    if project != "package":
+        print(_Labels.INFO + "Creating build script: build.py")
+        with open(utils_dir / "build.py", "x", encoding = "utf-8") as file:
+            file.write(BUILD_SCRIPT)
+            file.close
 
     if linter == "pylint":
         print(_Labels.INFO + "Creating file: .pylintrc")
