@@ -149,6 +149,8 @@ def _ignite(fuel: Path) -> int:
             file.write(f"{linter}\n")
         if test_framework not in ["unittest", "none"]:
             file.write(test_framework)
+        if project != "package":
+            file.write("pyinstaller")
         file.close()
 
     if linter == "pylint":
