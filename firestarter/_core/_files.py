@@ -12,7 +12,7 @@ PyInstaller.__main__.run(["main.py",
                           "-w",
                           "--disable-windowed-traceback"
                           ])
-j
+
 """
 
 SETUP_PY = """#
