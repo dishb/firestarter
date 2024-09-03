@@ -23,14 +23,18 @@ def _ignite(fuel: Path) -> int:
     init(autoreset = True)
 
     if not str(fuel).endswith(".fuel"):
-        print(_Labels.ERROR + f"{fuel} needs to be a fuel template file (ending in .fuel).")
+        print(_Labels.ERROR + f"{fuel} needs to be a fuel template file that ends in .fuel.")
         return 1
 
-    with open(fuel, "r", encoding = "utf-8") as template:
-        content = template.read()
-        template.close()
+    with open(fuel, "r", encoding = "utf-8") as file:
+        content = file.read()
+        file.close()
 
     lines = content.split("\n")
+
+    if len(lines) != len(set(lines)):
+        print(_Labels.ERROR + "Duplicate options found in fuel template file.")
+        return 1
 
     for index, line in enumerate(lines):
         line = line.split(" ")
