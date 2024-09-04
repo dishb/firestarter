@@ -9,6 +9,9 @@ from .._core._files import GITIGNORE, INIT, BUILD_SCRIPT
 from .._core._projects import _create_blank, _create_package, _create_game
 from .._core._labels import _Labels
 
+from .._utils._check_dupes import _check_dupes
+from .._utils._prep_file import _prep_file
+
 def _ignite(fuel: Path) -> int:
     """
     Parses a fuel template (file) and creates a project with firestarter.
@@ -25,21 +28,16 @@ def _ignite(fuel: Path) -> int:
     if not str(fuel).endswith(".fuel"):
         print(_Labels.ERROR + f"{fuel} needs to be a fuel template file that ends in .fuel.")
         return 1
+    
+    lines = _prep_file(fuel)
 
-    with open(fuel, "r", encoding = "utf-8") as file:
-        content = file.read()
-        file.close()
-
-    lines = content.split("\n")
-
-    if len(lines) != len(set(lines)):
+    if _check_dupes(lines):
         print(_Labels.ERROR + "Duplicate options found in fuel template file.")
         return 1
 
     for index, line in enumerate(lines):
-        line = line.split(" ")
-        line_num = index + 1
-
+        line_num = index + 1        
+        
         if line[0] in ["", " ", "$"]:
             pass
 
