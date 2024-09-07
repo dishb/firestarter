@@ -11,6 +11,7 @@ from .._core._labels import _Labels
 
 from .._utils._check_dupes import _check_dupes
 from .._utils._prep_file import _prep_file
+from ..utils._log import _init, _action, _error, _info
 
 def _ignite(fuel: Path) -> int:
     """
@@ -26,13 +27,13 @@ def _ignite(fuel: Path) -> int:
     init(autoreset = True)
 
     if not str(fuel).endswith(".fuel"):
-        print(_Labels.ERROR + f"{fuel} needs to be a fuel template file that ends in .fuel.")
+        _error(f"{fuel} needs to be a fuel template file that ends in .fuel.")
         return 1
     
     lines = _prep_file(fuel)
 
     if _check_dupes(lines):
-        print(_Labels.ERROR + "Duplicate options found in fuel template file.")
+        _error("Duplicate options found in fuel template file.")
         return 1
 
     for index, line in enumerate(lines):
@@ -50,7 +51,7 @@ def _ignite(fuel: Path) -> int:
             elif line[2].lower() in ["no", "n"]:
                 git = False
             else:
-                print(_Labels.ERROR + f"Line {line_num}: Invalid value for [git].")
+                _error(f"Line {line_num}: Invalid value for [git].")
                 print("Please read the documentation to learn more.")
                 return 1
 
@@ -59,7 +60,7 @@ def _ignite(fuel: Path) -> int:
 
         elif line[0] == "[project-type]":
             if line[2] not in ["blank", "package", "game"]:
-                print(_Labels.ERROR + f"Line {line_num}: Invalid value for [project-type].")
+                _error(f"Line {line_num}: Invalid value for [project-type].")
                 print("Please read the documentation to learn more.")
                 return 1
 
@@ -67,7 +68,7 @@ def _ignite(fuel: Path) -> int:
 
         elif line[0] == "[test-framework]":
             if line[2] not in ["pytest", "unittest", "none"]:
-                print(_Labels.ERROR + f"Line {line_num}: Invalid value for [test-framework].")
+                _error(f"Line {line_num}: Invalid value for [test-framework].")
                 print("Please read the documentation to learn more.")
                 return 1
 
@@ -75,23 +76,23 @@ def _ignite(fuel: Path) -> int:
 
         elif line[0] == "[linter]":
             if line[2] not in ["pylint", "flake8", "black", "bandit", "none", "ruff"]:
-                print(_Labels.ERROR + f"Line {line_num}: Invalid value for [linter].")
+                _error(f"Line {line_num}: Invalid value for [linter].")
                 print("Please read the documentation to learn more.")
                 return 1
 
             linter = line[2]
 
         else:
-            print(_Labels.ERROR + f"Line {line_num}: Invalid header.")
+            _error(f"Line {line_num}: Invalid header.")
             print("Please read the documentation to learn more.")
             return 1
 
     root_dir = Path(path) / name
     if os.path.exists(root_dir):
-        print(_Labels.ERROR + f"{root_dir} already exists.")
+        _error(f"{root_dir} already exists.")
         return 1
 
-    print(_Labels.INFO + "Creating project directory.")
+    _info("Creating project directory.")
 
     os.mkdir(root_dir)
     os.chdir(root_dir)
@@ -103,20 +104,20 @@ def _ignite(fuel: Path) -> int:
         python_cmd = "python"
         pip_cmd = "pip"
     else:
-        print(_Labels.ERROR + f"{system()} is not a supported operating system.")
+        _error(f"{system()} is not a supported operating system.")
         print("Please read the documentation to learn more.")
         return 1
 
-    print(_Labels.INFO + "Creating virtual environment.")
+    _info("Creating virtual environment.")
 
     venv_path = root_dir / ".venv"
     run([python_cmd, "-m", "venv", venv_path], check = True, stdout = PIPE)
 
     if git:
-        print(_Labels.INFO + "Initializing a git repository.")
+        _info("Initializing a git repository.")
         run(["git", "init", root_dir], stdout = PIPE, check = True)
 
-        print(_Labels.INFO + "Creating file: .gitignore")
+        _info("Creating file: .gitignore")
         with open(root_dir / ".gitignore", "x", encoding = "utf-8") as file:
             file.write(GITIGNORE)
             file.close()
@@ -129,7 +130,7 @@ def _ignite(fuel: Path) -> int:
         _create_game(root_dir)
 
     core_dir = root_dir / "core"
-    print(_Labels.INFO + f"Creating directory: {core_dir}")
+    _info(f"Creating directory: {core_dir}")
 
     os.mkdir(core_dir)
     with open(core_dir / "__init__.py", "x", encoding = "utf-8") as file:
@@ -137,14 +138,14 @@ def _ignite(fuel: Path) -> int:
         file.close()
 
     utils_dir = root_dir / "utils"
-    print(_Labels.INFO + f"Creating directory: {utils_dir}")
+    _info(f"Creating directory: {utils_dir}")
 
     os.mkdir(utils_dir)
     with open(utils_dir / "__init__.py", "x", encoding = "utf-8") as file:
         file.write(INIT)
         file.close()
 
-    print(_Labels.INFO + "Creating file: dev-requirements.txt")
+    _info("Creating file: dev-requirements.txt")
 
     with open(root_dir / "dev-requirements.txt", "x", encoding = "utf-8") as file:
         if linter != "none":
@@ -156,27 +157,25 @@ def _ignite(fuel: Path) -> int:
         file.close()
     
     if project != "package":
-        print(_Labels.INFO + "Creating build script: build.py")
+        _info("Creating build script: build.py")
         with open(utils_dir / "build.py", "x", encoding = "utf-8") as file:
             file.write(BUILD_SCRIPT)
             file.close
 
     if linter == "pylint":
-        print(_Labels.INFO + "Creating file: .pylintrc")
+        _info("Creating file: .pylintrc")
         with open(root_dir / ".pylintrc", "x", encoding = "utf-8") as file:
             file.write("")
             file.close()
 
-    print(_Labels.ACTION + f"Change to the project directory: cd {root_dir}")
+    _action(f"Change to the project directory: cd {root_dir}")
 
     if system().lower() in ["darwin", "linux"]:
         activate_venv = root_dir / ".venv/bin/activate"
-        print(_Labels.ACTION + f"Activate the virtual environment: source {activate_venv}")
+        _action(f"Activate the virtual environment: source {activate_venv}")
     else:
         activate_venv = root_dir / ".venv/Scripts/activate"
-        print(_Labels.ACTION +
-              f"Activate the virtual environment: {activate_venv}"
-              )
+        _action(f"Activate the virtual environment: {activate_venv}")
 
     def _install_package(package: str) -> None:
         """
@@ -207,8 +206,7 @@ def _ignite(fuel: Path) -> int:
 
     req_file = root_dir / "requirements.txt"
     dev_req_file = root_dir / "dev-requirements.txt"
-    print(_Labels.INFO + "Installing the dependencies:" +
-          f"\n{pip_cmd} install {req_file}" +
+    _info(f"\n{pip_cmd} install {req_file}" +
           f"\n{pip_cmd} install {dev_req_file}"
           )
     _install_packages(dev_req_file)
@@ -220,7 +218,7 @@ def _ignite(fuel: Path) -> int:
         print(f"{pip_cmd} install {dist_req_file}")
         _install_packages(dist_req_file)
 
-        print(_Labels.ACTION + f"Install the package in editable mode: {pip_cmd} install -e .")
+        _action(f"Install the package in editable mode: {pip_cmd} install -e .")
 
     print("")
     deinit()
