@@ -7,11 +7,10 @@ from colorama import deinit, init
 
 from .._core._files import GITIGNORE, INIT, BUILD_SCRIPT
 from .._core._projects import _create_blank, _create_package, _create_game
-from .._core._labels import _Labels
 
 from .._utils._check_dupes import _check_dupes
 from .._utils._prep_file import _prep_file
-from ..utils._log import _init, _action, _error, _info
+from .._utils._log import _action, _error, _info
 
 def _ignite(fuel: Path) -> int:
     """
