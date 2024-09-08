@@ -4,7 +4,7 @@ $ :: is called a seperator
 $ [option] is called a header
 
 [name] :: name
-[path] :: /Users/dishb/Coding/
+[path] :: /Users/dishb/Documents/
 [git] :: y
 [project-type] :: package
 [test-framework] :: pytest
