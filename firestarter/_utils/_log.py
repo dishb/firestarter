@@ -8,6 +8,3 @@ def _info(msg: str) -> None:
 
 def _action(msg: str) -> None:
     print(_Labels.ACTION + msg)
-
-def _init(msg: str) -> None:
-    print(_Labels.INIT + msg)

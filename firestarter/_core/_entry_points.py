@@ -6,6 +6,7 @@ from shutil import rmtree
 
 from .._fuel import _ignite
 from ._labels import _Labels
+from .._utils._log import _error
 
 def _console() -> int:
     """
@@ -48,9 +49,7 @@ projects with Python."""
         return _ignite(fuel_template)
 
     if system().lower() not in ["darwin", "linux", "windows"]:
-        print(_Labels.ERROR +
-              f"\n{system()} is not supported. Please use Linux, Windows, or macOS.\n"
-              )
+        _error(f"\n{system()} is not supported. Please use Linux, Windows, or macOS.\n")
         return 1
 
     name = input(_Labels.INIT + "Name of project: ")
@@ -61,7 +60,7 @@ projects with Python."""
 
     root_dir = Path(path) / name
     if os.path.exists(root_dir):
-        print(_Labels.ERROR + f"{root_dir} already exists.")
+        _error(f"{root_dir} already exists.")
         return 1
 
     git = ""
@@ -102,6 +101,9 @@ projects with Python."""
         file.close()
 
     return_code = _ignite(template_file)
+    
+    if return_code == 1:
+        return return_code
 
     with open(root_dir / "template.fuel", "x", encoding = "utf-8") as file:
         file.write(f"""$
