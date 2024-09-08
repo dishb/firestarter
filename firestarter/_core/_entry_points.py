@@ -57,7 +57,10 @@ projects with Python."""
 
         return _ignite(fuel_template)
     
-    log_level = args.log_level.lower()
+    if args.log_level:
+        log_level = args.log_level[0].lower()
+    else:
+        log_level = "NONE"
     logger = _Logger(log_level)
 
     if system().lower() not in ["darwin", "linux", "windows"]:
