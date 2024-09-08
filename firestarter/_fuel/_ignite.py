@@ -122,11 +122,11 @@ def _ignite(fuel: Path, logger: _Logger) -> int:
             file.close()
 
     if project == "blank":
-        _create_blank(root_dir)
+        _create_blank(root_dir, logger)
     elif project == "package":
-        _create_package(root_dir, name)
+        _create_package(root_dir, name, logger)
     elif project == "game":
-        _create_game(root_dir)
+        _create_game(root_dir, logger)
 
     core_dir = root_dir / "core"
     logger._info(f"Creating directory: {core_dir}")
