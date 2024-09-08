@@ -2,7 +2,6 @@ from pathlib import Path
 from os import mkdir
 
 from ._files import BLANK_MAIN, DIST_REQS, INIT, SETUP_PY, GAME_MAIN
-from ._labels import _Labels
 from .._utils._log import _info
 
 def _create_package(root_dir: Path, name: str) -> None:
