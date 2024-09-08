@@ -1,10 +1,49 @@
 from .._core._labels import _Labels
 
-def _error(msg: str) -> None:
-    print(_Labels.ERROR + msg)
+class _Logger():
+    """
+    A class for convenient logging / printing. Not meant for programming use.
+    """
     
-def _info(msg: str) -> None:
-    print(_Labels.INFO + msg)
+    def __init__(self, log_level: str):
+        """
+        Initialize a _Logger class instance with the _log_level variable.
 
-def _action(msg: str) -> None:
-    print(_Labels.ACTION + msg)
+        Args:
+            log_level (str): Message to be printed to the console.
+        """
+        
+        self._log_level = log_level
+    
+    def _error(self, msg: str) -> None:
+        """
+        A function to print out a message with an error label as a prefix.
+
+        Args:
+            msg (str): Message to be printed to the console.
+        """
+        
+        if self._log_level in ["error", "all"]:
+            print(_Labels.ERROR + msg)
+        
+    def _info(self, msg: str) -> None:
+        """
+        A function to print out a message with a info label as a prefix.
+
+        Args:
+            msg (str): Message to be printed to the console.
+        """
+        
+        if self._log_level in ["info", "all"]:
+            print(_Labels.INFO + msg)
+
+    def _action(self, msg: str) -> None:
+        """
+        A function to print out a message with an action label as a prefix.
+
+        Args:
+            msg (str): Message to be printed to the console.
+        """
+        
+        if self._log_level in ["action", "all"]:
+            print(_Labels.ACTION + msg)

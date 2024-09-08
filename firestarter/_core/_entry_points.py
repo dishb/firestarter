@@ -6,7 +6,7 @@ from shutil import rmtree
 
 from .._fuel import _ignite
 from ._labels import _Labels
-from .._utils._log import _error
+from .._utils._log import _Logger
 
 def _console() -> int:
     """
@@ -36,6 +36,15 @@ projects with Python."""
                         dest = "fuel",
                         metavar = "PATH TO TEMPLATE"
                         )
+    parser.add_argument("-l", "--log-level",
+                        nargs = 1,
+                        action = "store",
+                        help = "specify the level of logging in terminal.",
+                        required = False,
+                        dest = "log_level",
+                        metavar = "THE LEVEL OF LOGGING",
+                        choices = {"ERROR", "INFO", "ACTION", "ALL", "NONE"}
+                        )
 
     args = parser.parse_args()
 
@@ -47,9 +56,12 @@ projects with Python."""
         fuel_template = Path(args.fuel[0])
 
         return _ignite(fuel_template)
+    
+    log_level = args.log_level.lower()
+    logger = _Logger(log_level)
 
     if system().lower() not in ["darwin", "linux", "windows"]:
-        _error(f"\n{system()} is not supported. Please use Linux, Windows, or macOS.\n")
+        logger._error(f"\n{system()} is not supported. Please use Linux, Windows, or macOS.\n")
         return 1
 
     name = input(_Labels.INIT + "Name of project: ")
@@ -60,7 +72,7 @@ projects with Python."""
 
     root_dir = Path(path) / name
     if os.path.exists(root_dir):
-        _error(f"{root_dir} already exists.")
+        logger._error(f"{root_dir} already exists.")
         return 1
 
     git = ""
@@ -100,7 +112,7 @@ projects with Python."""
                   )
         file.close()
 
-    return_code = _ignite(template_file)
+    return_code = _ignite(template_file, logger)
     
     if return_code == 1:
         return return_code
