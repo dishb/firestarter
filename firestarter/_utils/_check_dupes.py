@@ -1,12 +1,11 @@
-def _check_dupes(lines: list) -> bool:
+def _check_dupes(lines: list[str]) -> bool:
     seen = set()
-    dupes = []
 
     for line in lines:
-        if line != "":
-            if line[0] in seen:
-                dupes.append(line[0])
+        if line != "" and line[0] != "$":
+            if line in seen:
+                return True
             else:
-                seen.add(line[0])
+                seen.add(line)
 
-    return len(dupes) == 0
+    return False

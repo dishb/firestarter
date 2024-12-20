@@ -1,6 +1,6 @@
 from pathlib import Path
 
-def _prep_file(file: Path) -> list:
+def _read_file(file: Path) -> list[str]:
     with open(file, "r", encoding = "utf-8") as file:
         content = file.read()
         file.close()
