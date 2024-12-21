@@ -12,6 +12,33 @@ from .._utils._check_dupes import _check_dupes
 from .._utils._read_file import _read_file
 from .._utils._log import _Logger
 
+def _install_package(package: str, root_dir: Path, python_cmd: str) -> None:
+    """
+    Installs a single package using pip.
+
+    Args:
+        package (str): The name of the package to be installed.
+    """
+        
+    venv_python_loc = root_dir / ".venv" / "bin" / python_cmd
+    run([venv_python_loc, "-m", "pip", "install", package], check = True, stdout = PIPE, stderr = PIPE)
+
+def _install_packages(file: Path, root_dir: Path, python_cmd: str) -> None:
+    """
+    Installs multiple packages from a requirements.txt file using pip.
+
+    Args:
+        file (Path): Path to the requirements.txt file.
+    """
+        
+    with open(file, "r", encoding = "utf-8") as req_file:
+        packages = req_file.read()
+        req_file.close()
+
+    packages = packages.split("\n")
+    for package in packages:
+        _install_package(package, root_dir, python_cmd)
+
 def _ignite(fuel: Path, logger: _Logger) -> int:
     """
     Parses a fuel template (file) and creates a project with firestarter.
@@ -51,7 +78,6 @@ def _ignite(fuel: Path, logger: _Logger) -> int:
                 git = False
             else:
                 logger._error(f"Line {line_num}: Invalid value for [git].")
-                print("Please read the documentation to learn more.")
                 return 1
 
         elif line[0] == "[path]":
@@ -60,7 +86,6 @@ def _ignite(fuel: Path, logger: _Logger) -> int:
         elif line[0] == "[project-type]":
             if line[2] not in ["blank", "package", "game"]:
                 logger._error(f"Line {line_num}: Invalid value for [project-type].")
-                print("Please read the documentation to learn more.")
                 return 1
 
             project = line[2]
@@ -68,7 +93,6 @@ def _ignite(fuel: Path, logger: _Logger) -> int:
         elif line[0] == "[test-framework]":
             if line[2] not in ["pytest", "unittest", "none"]:
                 logger._error(f"Line {line_num}: Invalid value for [test-framework].")
-                print("Please read the documentation to learn more.")
                 return 1
 
             test_framework = line[2]
@@ -76,14 +100,12 @@ def _ignite(fuel: Path, logger: _Logger) -> int:
         elif line[0] == "[linter]":
             if line[2] not in ["pylint", "flake8", "black", "bandit", "none", "ruff"]:
                 logger._error(f"Line {line_num}: Invalid value for [linter].")
-                print("Please read the documentation to learn more.")
                 return 1
 
             linter = line[2]
 
         else:
             logger._error(f"Line {line_num}: Invalid header.")
-            print("Please read the documentation to learn more.")
             return 1
 
     root_dir = Path(path) / name
@@ -104,7 +126,6 @@ def _ignite(fuel: Path, logger: _Logger) -> int:
         pip_cmd = "pip"
     else:
         logger._error(f"{system()} is not a supported operating system.")
-        print("Please read the documentation to learn more.")
         return 1
 
     logger._info("Creating virtual environment.")
@@ -176,46 +197,19 @@ def _ignite(fuel: Path, logger: _Logger) -> int:
         activate_venv = root_dir / ".venv/Scripts/activate"
         logger._action(f"Activate the virtual environment: {activate_venv}")
 
-    def _install_package(package: str) -> None:
-        """
-        Installs a single package using pip.
-
-        Args:
-            package (str): The name of the package to be installed.
-        """
-        
-        venv_python_loc = root_dir / ".venv" / "bin" / python_cmd
-        run([venv_python_loc, "-m", "pip", "install", package], check = True, stdout = PIPE, stderr = PIPE)
-
-    def _install_packages(file: Path) -> None:
-        """
-        Installs multiple packages from a requirements.txt file using pip.
-
-        Args:
-            file (Path): Path to the requirements.txt file.
-        """
-        
-        with open(file, "r", encoding = "utf-8") as req_file:
-            packages = req_file.read()
-            req_file.close()
-
-        packages = packages.split("\n")
-        for package in packages:
-            _install_package(package)
-
     req_file = root_dir / "requirements.txt"
     dev_req_file = root_dir / "dev-requirements.txt"
     logger._info(f"\n{pip_cmd} install {req_file}" +
           f"\n{pip_cmd} install {dev_req_file}"
           )
-    _install_packages(dev_req_file)
+    _install_packages(dev_req_file, root_dir, python_cmd)
     if project == "game":
-        _install_packages(req_file)
+        _install_packages(req_file, root_dir, python_cmd)
 
     if project == "package":
         dist_req_file = root_dir / "dist-requirements.txt"
         print(f"{pip_cmd} install {dist_req_file}")
-        _install_packages(dist_req_file)
+        _install_packages(dist_req_file, root_dir, python_cmd)
 
         logger._action(f"Install the package in editable mode: {pip_cmd} install -e .")
 

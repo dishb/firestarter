@@ -52,16 +52,17 @@ projects with Python."""
         print("\nfirestarter: v0.0.2\n")
         return 0
 
-    if args.fuel:
-        fuel_template = Path(args.fuel[0])
-
-        return _ignite(fuel_template)
-    
     if args.log_level:
         log_level = args.log_level[0].lower()
     else:
         log_level = "NONE"
+    
     logger = _Logger(log_level)
+
+    if args.fuel:
+        fuel_template = Path(args.fuel[0])
+
+        return _ignite(fuel_template, logger)
 
     if system().lower() not in ["darwin", "linux", "windows"]:
         logger._error(f"\n{system()} is not supported. Please use Linux, Windows, or macOS.\n")
