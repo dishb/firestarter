@@ -55,7 +55,7 @@ projects with Python."""
     if args.log_level:
         log_level = args.log_level[0].lower()
     else:
-        log_level = "NONE"
+        log_level = "all"
     
     logger = _Logger(log_level)
 
@@ -95,11 +95,11 @@ projects with Python."""
     while linter.lower() not in ["pylint", "flake8", "black", "bandit", "none", "ruff"]:
         linter = input(_Labels.INIT + "Linter (pylint, flake8, black, bandit, none, ruff): ")
 
-    temp_dir = Path.cwd() / ".firestarter/"
+    temp_dir = Path("~").expanduser() / ".firestarter/"
     if not os.path.exists(temp_dir):
         os.mkdir(temp_dir)
 
-    template_file = temp_dir / ".firestarter_temp.fuel"
+    template_file = temp_dir / ".temp.fuel"
     if os.path.exists(template_file):
         mode = "w"
     else:
