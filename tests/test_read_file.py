@@ -1,4 +1,4 @@
-from ..firestarter._utils._read_file import _read_file
+from firestarter._utils._read_file import _read_file
 
 def test_read_file(tmp_path):
     file = tmp_path / "test.txt"

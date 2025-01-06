@@ -1,4 +1,4 @@
-from ..firestarter._utils._check_dupes import _check_dupes
+from firestarter._utils._check_dupes import _check_dupes
 
 def test_dupe_comments() -> None:
     test_list = ["$ comment", "$ comment", "[name] :: name", "[path] :: /Users/dishb/Documents/"]
