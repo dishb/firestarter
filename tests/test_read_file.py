@@ -9,4 +9,3 @@ $ another comment
     file.write_text(file_content, encoding = "utf-8")
     expected = ["$ comment", "$ another comment", "[name] :: name", "[path] :: /Users/dishb/Documents/"]
     assert _read_file(file) == expected
-        

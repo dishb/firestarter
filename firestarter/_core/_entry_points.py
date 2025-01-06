@@ -10,7 +10,7 @@ from .._utils._log import _Logger
 
 def _console() -> int:
     """
-    firestarter's main entry point. Not meant for programming use.
+    `firestarter`'s main entry point. Not meant for programming use.
 
     Returns:
         int: The exit code.

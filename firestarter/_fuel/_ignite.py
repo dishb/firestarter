@@ -7,7 +7,6 @@ from colorama import deinit, init
 
 from .._core._files import GITIGNORE, INIT, BUILD_SCRIPT
 from .._core._projects import _create_blank, _create_package, _create_game
-
 from .._utils._check_dupes import _check_dupes
 from .._utils._read_file import _read_file
 from .._utils._log import _Logger
@@ -15,10 +14,11 @@ from .._utils._install_packages import _install_packages
 
 def _ignite(fuel: Path, logger: _Logger) -> int:
     """
-    Parses a fuel template (file) and creates a project with firestarter.
+    Parses a fuel template (file) and creates a project with `firestarter`.
 
     Args:
         file (Path): The file path to the fuel template.
+        logger (_Logger): A logger customized with a verbosity level.
 
     Returns:
         int: The exit code.

@@ -6,12 +6,6 @@ class _Logger():
     """
     
     def __init__(self, log_level: str | None = "all"):
-        """
-        Initialize a _Logger class instance with the _log_level variable.
-
-        Args:
-            log_level (str): Message to be printed to the console.
-        """
         
         self._log_level = log_level
     

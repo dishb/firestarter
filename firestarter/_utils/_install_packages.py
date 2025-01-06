@@ -7,6 +7,9 @@ def _install_package(package: str, root_dir: Path, python_cmd: str) -> None:
 
     Args:
         package (str): The name of the package to be installed.
+        root_dir (Path): The path to the project's root directory.
+        python_cmd (str): The command used to execute Python in the shell. Varies if the user is on
+        a UNIX-based versus Windows system.
     """
     
     venv_python_loc = root_dir / ".venv" / "bin" / python_cmd
@@ -14,10 +17,13 @@ def _install_package(package: str, root_dir: Path, python_cmd: str) -> None:
 
 def _install_packages(file: Path, root_dir: Path, python_cmd: str) -> None:
     """
-    Installs multiple packages from a requirements.txt file using pip.
+    Installs a multiple packages using pip.
 
     Args:
-        file (Path): Path to the requirements.txt file.
+        package (str): The name of the package to be installed.
+        root_dir (Path): The path to the project's root directory.
+        python_cmd (str): The command used to execute Python in the shell. Varies if the user is on
+        a UNIX-based versus Windows system.
     """
         
     with open(file, "r", encoding = "utf-8") as req_file:
